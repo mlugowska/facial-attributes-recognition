@@ -1,0 +1,4 @@
+xlrd
+pandas
+tabula-py
+pillow
