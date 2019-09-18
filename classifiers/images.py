@@ -49,15 +49,15 @@ models = [
 # grab all image paths in the input dataset directory, initialize our
 # list of extracted features and corresponding labels
 print('[INFO] extracting image features...')
-imagePaths = paths.list_images('/Users/mlugowska/PhD/applied_statistics/celeba-dataset/img_align_celeba')
+image_paths = paths.list_images('/Users/mlugowska/PhD/applied_statistics/celeba-dataset/img_align_celeba')
 data = []
 labels = []
 
 # loop over our input images
-for imagePath in imagePaths:
+for image_path in image_paths:
     # load the input image from disk, compute color channel
     # statistics, and then update our data list
-    image = Image.open(imagePath)
+    image = Image.open(image_path)
     features = extract_color_stats(image)
     data.append(features)
 
@@ -153,7 +153,7 @@ for name, model in models:
     sens = (tp / (tp + fn))
     spec = (tn / (tn + fp))
     fig = print_confusion_matrix(confusion_matrix=cm, class_names=['Male', 'Female'], name=name)
-    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/{name}_confusion_matrix.png')
+    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/images/no_feature_selection/{name}_confusion_matrix.png')
 
     msg = f'{name}: Accuracy - {ac}, Sensitivity - {sens}, Specifity - {spec}, Error - {err}'
     print(msg)
@@ -174,4 +174,4 @@ for name, model in models:
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
     plt.title(f'ROC Curve of {name}')
-    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/images/{name}.png')
+    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/images/no_feature_selection/{name}.png')

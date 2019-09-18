@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_selection import RFE
+from sklearn.feature_selection import RFE, SelectKBest, chi2
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 from sklearn.model_selection import train_test_split
@@ -105,11 +105,16 @@ dic = {'PC{}'.format(i): most_important_names[i] for i in range(n_pcs)}
 df = pd.DataFrame(dic.items())
 
 features = range(pca.n_components_)
-plt.bar(features, pca.explained_variance_ratio_)
+ax = plt.bar(features, pca.explained_variance_ratio_)
 plt.xticks(features)
 plt.yticks(features)
+plt.ylim(0, 1)
 plt.xlabel('PCA features')
 plt.ylabel('variance')
+
+for p in ax.patches:
+    ax.annotate(format(p.get_height(), '.2f'), (p.get_x() + p.get_width() / 2., p.get_height()), ha='center',
+                va='center', xytext=(0, 10), textcoords='offset points')
 
 plt.semilogy(pca.explained_variance_ratio_, '--o')
 plt.semilogy(pca.explained_variance_ratio_.cumsum(), '--o')
@@ -154,7 +159,7 @@ for name, model in models:
     sens = (tp / (tp + fn))
     spec = (tn / (tn + fp))
     fig = print_confusion_matrix(confusion_matrix=cm, class_names=['Male', 'Female'], name=name)
-    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/{name}_confusion_matrix.png')
+    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/attrs/RFE/{name}_confusion_matrix.png')
 
     msg = f'{name}: Accuracy - {ac}, Sensitivity - {sens}, Specifity - {spec}, Error - {err}'
     print(msg)
@@ -175,4 +180,4 @@ for name, model in models:
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
     plt.title(f'ROC Curve of {name}')
-    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/{name}.png')
+    plt.savefig(f'/Users/mlugowska/PhD/applied_statistics/figs/attrs/RFE/{name}_RFE.png')
